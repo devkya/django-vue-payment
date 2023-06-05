@@ -1,33 +1,29 @@
 <script setup>
-// const status = ref([
-//   { name: "미결제", value: "ready" },
-//   { name: "결제완료", value: "paid" },
-//   { name: "결제취소", value: "cancelled" },
-//   { name: "결제실패", value: "failed" },
-// ]);
 const name = ref("");
 const amount = ref("");
 
-function createPayment(event) {
+async function createPayment(event) {
   const forms = document.querySelectorAll(".needs-validation");
-  console.log(forms);
   Array.prototype.slice.call(forms).forEach(function (form) {
-    form.addEventListener(
-      "submit",
-      function (event) {
-        if (!form.checkValidity()) {
-          event.preventDefault();
-          event.stopPropagation();
-        }
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
 
-        form.classList.add("was-validated");
-      },
-      false
-    );
+    form.classList.add("was-validated");
   });
-}
 
-// function validateTest() {}
+  if (forms[0].checkValidity()) {
+    const { data } = await useFetch("/api/payment/", {
+      method: "POST",
+      body: JSON.stringify({
+        name: name.value,
+        amount: amount.value,
+      }),
+    });
+    console.log(data);
+  }
+}
 </script>
 
 <template>
@@ -45,7 +41,7 @@ function createPayment(event) {
             placeholder="결제명"
             required
           />
-          <div class="invalid-feedback">Valid first name is required.</div>
+          <div class="invalid-feedback">Valid Name is required.</div>
         </div>
 
         <div class="col-12">
@@ -59,14 +55,12 @@ function createPayment(event) {
               placeholder="결제 금액"
               required
             />
-            <div class="invalid-feedback">Your username is required.</div>
+            <div class="invalid-feedback">Your Amount is required.</div>
           </div>
         </div>
       </div>
 
-      <hr class="my-4" />
-
-      <button class="w-100 btn btn-primary btn-lg" type="submit">
+      <button class="mt-4 btn btn-primary" type="submit">
         Create New Payment
       </button>
     </form>
