@@ -48,10 +48,19 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third apps
     "debug_toolbar",
+    'rest_framework',
     # local apps
     "accounts",
     "payment",
 ]
+
+REST_FRAMEWORK = {
+
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny'
+    ]
+}
+
 
 MIDDLEWARE = [
     "debug_toolbar.middleware.DebugToolbarMiddleware",
