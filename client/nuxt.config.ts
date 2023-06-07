@@ -11,4 +11,10 @@ export default defineNuxtConfig({
       ],
     },
   },
+  runtimeConfig: {
+    test: "123",
+    public: {
+      PORTONE_SHOP_ID: process.env.PORTONE_SHOP_ID,
+    },
+  },
 });

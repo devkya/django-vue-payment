@@ -3,32 +3,34 @@ const name = ref("");
 const amount = ref("");
 
 async function createPayment(event) {
-  const forms = document.querySelectorAll(".needs-validation");
-  Array.prototype.slice.call(forms).forEach(function (form) {
-    if (!form.checkValidity()) {
-      event.preventDefault();
-      event.stopPropagation();
-    }
+  const form = document.querySelectorAll(".needs-validation")[0];
 
+  if (!form.checkValidity()) {
+    event.preventDefault();
+    event.stopPropagation();
     form.classList.add("was-validated");
-  });
-
-  if (forms[0].checkValidity()) {
-    const { data } = await useFetch("/api/payment/", {
+  } else {
+    // const { data, error } = await useFetch("/api/payment"); // XXX: server/api/payment 작동안됨
+    const uri = "http://localhost:8000/payment/pay/";
+    const res = await $fetch(uri, {
       method: "POST",
-      body: JSON.stringify({
+      body: {
         name: name.value,
         amount: amount.value,
-      }),
+      },
+    }).catch((error) => {
+      console.log(error);
     });
-    console.log(data);
+    console.log(res);
   }
 }
 </script>
 
 <template>
   <div>
-    <h2>새 결제 생성하기</h2>
+    <div>
+      <h2>새 결제 생성하기</h2>
+    </div>
     <form class="needs-validation" novalidate @submit.prevent="createPayment">
       <div class="row g-3">
         <div class="col-sm-12">
@@ -41,7 +43,7 @@ async function createPayment(event) {
             placeholder="결제명"
             required
           />
-          <div class="invalid-feedback">Valid Name is required.</div>
+          <div class="invalid-feedback">Name is required.</div>
         </div>
 
         <div class="col-12">
@@ -55,7 +57,7 @@ async function createPayment(event) {
               placeholder="결제 금액"
               required
             />
-            <div class="invalid-feedback">Your Amount is required.</div>
+            <div class="invalid-feedback">Amount is required.</div>
           </div>
         </div>
       </div>

@@ -48,21 +48,18 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third apps
     "debug_toolbar",
-    'rest_framework',
+    "rest_framework",
+    "corsheaders",
     # local apps
     "accounts",
     "payment",
 ]
 
-REST_FRAMEWORK = {
-
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
-    ]
-}
+REST_FRAMEWORK = {"DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"]}
 
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -153,3 +150,13 @@ MEDIA_ROOT = env.str("MEDIA_ROOT", default=BASE_DIR / "media")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 INTERNAL_IPS = env.list("INTERNAL_IPS", default=["127.0.0.1"])
+
+# CORS
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+]
+CORS_ALLOW_CREDENTIALS = True
+
+PORTONE_SHOP_ID = env.str("PORTONE_SHOP_ID")
+PORTONE_API_KEY = env.str("PORTONE_API_KEY")
+PORTONE_API_SECRET = env.str("PORTONE_API_SECRET")

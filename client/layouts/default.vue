@@ -1,4 +1,7 @@
-<script setup></script>
+<script setup>
+const route = useRoute();
+console.log(route.name);
+</script>
 
 <template>
   <div>
@@ -15,12 +18,30 @@
 
         <ul class="nav nav-pills">
           <li class="nav-item">
-            <a href="#" class="nav-link active" aria-current="page">Home</a>
+            <NuxtLink
+              class="nav-link"
+              :class="$route.name == 'index' ? 'active' : ''"
+              to="/"
+              >Home</NuxtLink
+            >
           </li>
-          <li class="nav-item"><a href="#" class="nav-link">Features</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">Pricing</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">FAQs</a></li>
-          <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+          <li class="nav-item">
+            <NuxtLink
+              class="nav-link"
+              :class="$route.name == 'check' ? 'active' : ''"
+              to="/check"
+              >Complete</NuxtLink
+            >
+          </li>
+
+          <li class="nav-item">
+            <NuxtLink
+              class="nav-link"
+              :class="$route.name == 'payment' ? 'active' : ''"
+              to="/payment"
+              >Payment</NuxtLink
+            >
+          </li>
         </ul>
       </header>
     </div>

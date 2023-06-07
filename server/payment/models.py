@@ -1,6 +1,12 @@
+from django.conf import settings
 from django.db import models
 from uuid import uuid4
 from django.core.validators import MinValueValidator
+from django.http import Http404
+from iamport import Iamport
+import logging
+
+logger = logging.getLogger("portone")
 
 
 # Create your models here.
@@ -27,4 +33,21 @@ class Payment(models.Model):
 
     @property
     def merchant_uid(self) -> str:
+        print(self.uid.hex)
         return self.uid.hex
+
+    def portone_check(self, commit=True):
+        api = Iamport(
+            imp_key=settings.PORTONE_API_KEY, imp_secret=settings.PORTONE_API_SECRET
+        )
+        try:
+            meta = api.find(merchant_uid=self.merchant_uid)
+        except (Iamport.ResponseError, Iamport.HttpError) as e:
+            logger.error(str(e), exc_info=e)
+            raise Http404(str(e))
+
+        self.status = meta["status"]
+        self.is_paid_ok = meta["status"] == "paid" and meta["amount"] == self.amount
+        if commit:
+            self.save()
+        return meta

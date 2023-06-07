@@ -1,14 +1,26 @@
-export default defineEventHandler(async (event) => {
-  console.log("payment()...");
-  const { formData } = await readBody(event);
-  console.log(formData);
+// export default defineEventHandler(async (event) => {
+//   console.log("payment()...");
+//   const { formData } = await readBody(event);
+//   console.log(formData);
+//   const uri = "http://localhost:8000/payment/pay/";
+//   const { data } = await $fetch(uri, {
+//     method: "POST",
+//     body: JSON.stringify(event),
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+//   return data;
+// });
+
+export default defineEventHandler((event) => {
+  console.log("event()...", event);
   const uri = "http://localhost:8000/payment/pay/";
-  const { data } = await $fetch(uri, {
+  const { data } = $fetch(uri, {
     method: "POST",
-    body: JSON.stringify(event),
-    headers: {
-      "Content-Type": "application/json",
-    },
+  }).catch((err) => {
+    console.log(err);
   });
-  return data;
+  console.log(data);
+  return { data: "test" };
 });

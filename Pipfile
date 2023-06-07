@@ -9,6 +9,8 @@ django-debug-toolbar = "*"
 django-environ = "*"
 djangorestframework = "*"
 black = "*"
+django-cors-headers = "*"
+iamport-rest-client = "*"
 
 [dev-packages]
 
