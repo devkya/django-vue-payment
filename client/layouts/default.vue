@@ -1,6 +1,14 @@
 <script setup>
+import { useAuthStore } from "~/stores/auth";
+const authStore = useAuthStore();
 const route = useRoute();
-console.log(route.name);
+
+const user = computed(() => authStore.getUser);
+
+function logout() {
+  authStore.logout();
+  route.push("/");
+}
 </script>
 
 <template>
@@ -41,6 +49,17 @@ console.log(route.name);
               to="/payment"
               >Payment</NuxtLink
             >
+          </li>
+          <li v-if="!user" class="nav-item">
+            <NuxtLink
+              class="nav-link"
+              :class="$route.name == 'payment' ? 'active' : ''"
+              to="/account/login"
+              >Login</NuxtLink
+            >
+          </li>
+          <li v-else class="nav-item">
+            <a class="nav-link" href="#" @click="logout">Logout</a>
           </li>
         </ul>
       </header>

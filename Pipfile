@@ -11,6 +11,9 @@ djangorestframework = "*"
 black = "*"
 django-cors-headers = "*"
 iamport-rest-client = "*"
+pillow = "*"
+requests = "*"
+tqdm = "*"
 
 [dev-packages]
 

@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # local apps
     "accounts",
     "payment",
+    "mall",
 ]
 
 REST_FRAMEWORK = {"DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"]}

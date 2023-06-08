@@ -21,7 +21,6 @@ async function createPayment(event) {
     }).catch((error) => {
       console.log(error);
     });
-    console.log(res);
   }
 }
 </script>

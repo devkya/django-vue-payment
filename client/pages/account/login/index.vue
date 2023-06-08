@@ -1,5 +1,8 @@
 <script setup>
+import { useAuthStore } from "~/stores/auth";
 const router = useRouter();
+const authStore = useAuthStore();
+
 const username = ref("");
 const password = ref("");
 
@@ -11,7 +14,7 @@ async function createAccount() {
     event.stopPropagation();
     form.classList.add("was-validated");
   } else {
-    const uri = "http://localhost:8000/accounts/signup/";
+    const uri = "http://localhost:8000/accounts/login/";
     const res = await $fetch(uri, {
       method: "POST",
       body: {
@@ -24,7 +27,8 @@ async function createAccount() {
 
     if (res) {
       console.log(res);
-      router.push("/account/login");
+      authStore.user = res;
+      router.push("/");
     }
   }
 }
@@ -34,7 +38,7 @@ async function createAccount() {
   <div>
     <div>
       <div>
-        <h2>새 결제 생성하기</h2>
+        <h2>로그인</h2>
       </div>
       <form class="needs-validation" novalidate @submit.prevent="createAccount">
         <div class="row g-3">
@@ -67,12 +71,8 @@ async function createAccount() {
           </div>
         </div>
 
-        <button class="mt-4 btn btn-primary" type="submit">
-          Create New Account
-        </button>
+        <button class="mt-4 btn btn-primary" type="submit">Login</button>
       </form>
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped></style>
