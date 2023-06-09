@@ -12,17 +12,20 @@ const search = ref("");
 const pages = ref(0);
 const products = computed(() => productStore.products);
 
-function clickCallback(pageNum) {
+async function clickCallback(pageNum) {
   console.log(pageNum);
-  productStore.loadProduct(pageNum);
+  await productStore.loadProduct(pageNum);
   window.scrollTo({
     top: 0,
     behavior: "smooth",
   });
 }
 
-function searchProducts() {
-  console.log("searchProducts()...");
+async function searchProducts() {
+  // EDIT : 수정해야 함
+  console.log("searchProducts()...", search.value);
+  await productStore.searchProducts(search.value);
+  pages.value = productStore.pages;
 }
 </script>
 
@@ -30,7 +33,7 @@ function searchProducts() {
   <div>
     <div class="row">
       <form
-        class="col-8 col-lg-4 d-flex flex-row"
+        class="col-12 col-lg-4 d-flex flex-row"
         @submit.prevent="searchProducts"
       >
         <input
@@ -38,7 +41,7 @@ function searchProducts() {
           class="form-control form-control-white"
           placeholder="상품명을 검색하세요"
         />
-        <button type="button" class="btn btn-secondary">Search</button>
+        <button type="submit" class="mx-1 btn btn-secondary">Search</button>
       </form>
     </div>
 
