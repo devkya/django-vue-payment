@@ -50,6 +50,7 @@ function logout() {
               >Payment</NuxtLink
             >
           </li>
+
           <li v-if="!user" class="nav-item">
             <NuxtLink
               class="nav-link"
@@ -58,6 +59,15 @@ function logout() {
               >Login</NuxtLink
             >
           </li>
+          <li v-if="!user" class="nav-item">
+            <NuxtLink
+              class="nav-link"
+              :class="$route.name == 'payment' ? 'active' : ''"
+              to="/account/signup"
+              >Sign Up</NuxtLink
+            >
+          </li>
+
           <li v-else class="nav-item">
             <a class="nav-link" href="#" @click="logout">Logout</a>
           </li>

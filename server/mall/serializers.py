@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 
 class ProductListSerializer(ModelSerializer):
-    category_name = serializers.SerializerMethodField()
+    category_name = serializers.CharField(source="category.name")
 
     class Meta:
         model = Product
@@ -18,6 +18,3 @@ class ProductListSerializer(ModelSerializer):
             "created_at",
             "updated_at",
         ]
-
-    def get_category_name(self, obj):
-        return obj.category.name

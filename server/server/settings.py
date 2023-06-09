@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # third apps
+    "django_extensions",
     "debug_toolbar",
     "rest_framework",
     "corsheaders",
