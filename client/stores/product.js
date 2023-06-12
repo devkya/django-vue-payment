@@ -1,4 +1,6 @@
 import { defineStore } from "pinia";
+import { useAuthStore } from "./auth";
+
 export const useProductStore = defineStore("product", {
   state: () => ({
     products: [],
@@ -37,6 +39,26 @@ export const useProductStore = defineStore("product", {
         );
         this.products = res.results;
         this.pages = res.pages;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async addCart(product_pk, quantity = 1) {
+      const authStore = useAuthStore();
+      const username = authStore.user.username;
+
+      try {
+        const res = await $fetch(
+          `http://localhost:8000/mall/add-cart/${product_pk}/`,
+          {
+            method: "POST",
+            body: {
+              username,
+              quantity,
+            },
+          }
+        );
+        return res;
       } catch (err) {
         console.log(err);
       }

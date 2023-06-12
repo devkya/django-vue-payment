@@ -1,6 +1,7 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Product, Category
+from .models import Product, Category, CartProduct
 from rest_framework import serializers
+from accounts.serializers import UserSerializer
 
 
 class ProductListSerializer(ModelSerializer):
@@ -18,3 +19,18 @@ class ProductListSerializer(ModelSerializer):
             "created_at",
             "updated_at",
         ]
+
+
+class CartProductSerializer(ModelSerializer):
+    class Meta:
+        model = CartProduct
+        fields = ["id", "product", "quantity", "user", "product"]
+
+
+class CarCartProductSerializer(ModelSerializer):
+    user = UserSerializer()
+    product = ProductListSerializer()
+
+    class Meta:
+        model = CartProduct
+        fields = ["id", "product", "quantity", "user", "product"]

@@ -1,11 +1,18 @@
 from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
-from .models import Product, Category
-from .serializers import ProductListSerializer
+from rest_framework.views import APIView
+from .models import Product, Category, CartProduct
+from .serializers import (
+    ProductListSerializer,
+    CarCartProductSerializer,
+    CartProductSerializer,
+)
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
 from collections import OrderedDict
+from accounts.models import User
+from django.shortcuts import get_object_or_404
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -27,7 +34,9 @@ class StandardResultsSetPagination(PageNumberPagination):
 
 # Create your views here.
 class ProductViewSet(ModelViewSet):
-    queryset = Product.objects.select_related("category")
+    queryset = Product.objects.filter(status=Product.Status.ACTIVE).select_related(
+        "category"
+    )
     serializer_class = ProductListSerializer
     pagination_class = StandardResultsSetPagination
 
@@ -44,4 +53,35 @@ class ProductViewSet(ModelViewSet):
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+class AddCartAPIView(APIView):
+    def post(self, request, product_pk):
+        try:
+            queryset = CartProduct.objects.all()
+            user = User.objects.get(username=request.data["username"])
+            product_queryset = Product.objects.filter(status=Product.Status.ACTIVE)
+            product = get_object_or_404(product_queryset, pk=product_pk)
+
+            cart_product, is_created = queryset.get_or_create(
+                user=user,
+                product=product,
+                defaults={"quantity": int(request.data["quantity"])},
+            )
+            if not is_created:
+                cart_product.quantity += int(request.data["quantity"])
+                cart_product.save()
+                return Response(status=status.HTTP_200_OK)
+
+            return Response(status=status.HTTP_201_CREATED)
+        except Exception as e:
+            print(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class CartAPIView(APIView):
+    def get(self, request):
+        queryset = CartProduct.objects.all()
+        serializer = CartProductSerializer(queryset, many=True)
         return Response(serializer.data)

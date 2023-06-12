@@ -14,21 +14,13 @@ async function createAccount() {
     event.stopPropagation();
     form.classList.add("was-validated");
   } else {
-    const uri = "http://localhost:8000/accounts/login/";
-    const res = await $fetch(uri, {
-      method: "POST",
-      body: {
-        username: username.value,
-        password: password.value,
-      },
-    }).catch((error) => {
-      console.log(error);
-    });
-
+    const data = {
+      username: username.value,
+      password: password.value,
+    };
+    const res = await authStore.login(data);
     if (res) {
-      console.log(res);
-      authStore.user = res;
-      router.push("/");
+      router.push("/mall");
     }
   }
 }
