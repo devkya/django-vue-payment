@@ -7,6 +7,7 @@ onMounted(async () => {
   pages.value = productStore.pages;
 });
 
+const isMsg = ref("hidden");
 const productStore = useProductStore();
 const search = ref("");
 const pages = ref(0);
@@ -46,10 +47,22 @@ async function searchProducts() {
     </div>
 
     <div class="row">
+      <div class="col-12">
+        <div
+          class="alert alert-primary text-center"
+          :style="{ visibility: isMsg }"
+          role="alert"
+        >
+          상품을 장바구니에 추가했습니다!
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
       <div
         v-for="(product, index) in products"
         :key="index"
-        class="col-sm-6 col-lg-4 my-2"
+        class="col-sm-6 col-lg-4 my-1"
       >
         <ProductItemCard :product="product"></ProductItemCard>
       </div>

@@ -4,7 +4,6 @@ from rest_framework.views import APIView
 from .models import Product, Category, CartProduct
 from .serializers import (
     ProductListSerializer,
-    CarCartProductSerializer,
     CartProductSerializer,
 )
 from rest_framework.response import Response
@@ -85,3 +84,13 @@ class CartAPIView(APIView):
         queryset = CartProduct.objects.all()
         serializer = CartProductSerializer(queryset, many=True)
         return Response(serializer.data)
+
+    def post(self, request):
+        try:
+            user = User.objects.get(username=request.data["username"])
+            queryset = CartProduct.objects.filter(user=user)
+            serializer = CartProductSerializer(queryset, many=True)
+            return Response(serializer.data)
+
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

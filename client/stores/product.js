@@ -63,5 +63,20 @@ export const useProductStore = defineStore("product", {
         console.log(err);
       }
     },
+    getCart() {
+      const authStore = useAuthStore();
+      const username = authStore.user.username;
+      try {
+        const res = $fetch(`http://localhost:8000/mall/cart/`, {
+          method: "POST",
+          body: {
+            username,
+          },
+        });
+        return res;
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
 });
